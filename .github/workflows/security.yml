@@ -17,7 +17,7 @@ jobs:
     name: Secrets scanning
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
       - name: PIPE-1
@@ -30,7 +30,7 @@ jobs:
     name: SAST
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: PIPE-2
         run: |
           echo "TODO (PIPE-2): Aikido SAST is connected-repo (no scan step"
@@ -41,7 +41,7 @@ jobs:
     name: SCA
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: PIPE-2 (dependency findings)
         run: |
           echo "TODO: same as the sast job's PIPE-2, but for dependency"
@@ -63,7 +63,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: PIPE-4
         run: |
           echo "TODO (PIPE-4): install @aikidosec/ci-api-client and call"
