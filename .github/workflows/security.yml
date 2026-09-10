@@ -1,0 +1,72 @@
+# Scaffold only -- every job below is a placeholder. Fill in the TODOs
+# following REQUIREMENTS.md#Pipeline (PIPE-1..4). Keep the `permissions:`
+# block as-is: SARIF uploads silently fail without `security-events: write`.
+name: Security Pipeline
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  secrets-scan:
+    name: Secrets scanning
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: PIPE-1
+        run: |
+          echo "TODO (PIPE-1): confirm Aikido's connected-repo scan covers secrets"
+          echo "for this repo, or add a local gitleaks step here as a fast"
+          echo "pre-merge check. See REQUIREMENTS.md#PIPE-1"
+
+  sast:
+    name: SAST
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: PIPE-2
+        run: |
+          echo "TODO (PIPE-2): Aikido SAST is connected-repo (no scan step"
+          echo "needed here for detection). This job is where PR Gating"
+          echo "would show up as a status check. See REQUIREMENTS.md#PIPE-2"
+
+  sca:
+    name: SCA
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: PIPE-2 (dependency findings)
+        run: |
+          echo "TODO: same as the sast job's PIPE-2, but for dependency"
+          echo "findings. See REQUIREMENTS.md#PIPE-2"
+
+  dast-target-check:
+    name: Confirm DAST target is reachable
+    runs-on: ubuntu-latest
+    steps:
+      - name: PIPE-3
+        run: |
+          echo "TODO (PIPE-3): point Aikido Surface Monitoring at your Render"
+          echo "URL and record here what scan modes your plan can access."
+          echo "See REQUIREMENTS.md#PIPE-3"
+
+  release-gate:
+    name: Aikido release gate
+    needs: [secrets-scan, sast, sca]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: PIPE-4
+        run: |
+          echo "TODO (PIPE-4): install @aikidosec/ci-api-client and call"
+          echo "scan-release, failing this job above your chosen severity."
+          echo "Needs an AIKIDO_CLIENT_API_KEY repo secret."
+          echo "See REQUIREMENTS.md#PIPE-4"

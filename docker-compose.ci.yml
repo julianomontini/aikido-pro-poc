@@ -1,0 +1,8 @@
+# Boilerplate -- local/CI convenience only.
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SECRET_KEY=local-dev-only

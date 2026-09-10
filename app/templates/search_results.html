@@ -1,0 +1,12 @@
+{# TODO (DAST-4): render `q` (the search query) and `reports` (the matches).
+   See REQUIREMENTS.md#DAST-4 before deciding how to render the query back
+   to the page -- that decision is the exercise. #}
+<!doctype html>
+<title>Search results</title>
+<h1>Search results</h1>
+{# TODO (DAST-4): render the query the user searched for, here #}
+<ul>
+{% for report in reports %}
+  <li>{{ report.title }}</li>
+{% endfor %}
+</ul>

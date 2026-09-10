@@ -1,0 +1,13 @@
+# --- runtime, boilerplate -- pinned to current safe versions ---
+Flask==3.0.3
+Werkzeug==3.0.4
+gunicorn==22.0.0
+
+# --- SCA exercise (REQUIREMENTS.md#SCA): pin at least 3 dependencies below
+# to REAL, documented CVEs -- don't guess a version number. Look them up at
+# https://osv.dev or https://github.com/advisories and pin the affected
+# version, e.g.:
+#
+# PyYAML==<a version with a known CVE>      # REQUIREMENTS.md#SCA-1
+# requests==<a version with a known CVE>    # REQUIREMENTS.md#SCA-2
+# <your choice>==<a version with a known CVE>  # REQUIREMENTS.md#SCA-3

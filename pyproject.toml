@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "aikido-pro-poc"
+version = "0.1.0"
+description = "Deliberately vulnerable Flask app for an Aikido Pro (free plan) SAST/SCA/DAST POC"
+authors = ["Juliano Montini <julianomontini@gmail.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+Flask = "^3.0.3"
+gunicorn = "^22.0.0"
+
+# --- SCA exercise (REQUIREMENTS.md#SCA): add at least 3 dependencies below,
+# pinned to REAL, documented CVEs -- via `poetry add package==<version>`,
+# not by hand-editing a version here and hoping. Let Poetry resolve it and
+# write poetry.lock. Look up affected versions at https://osv.dev or
+# https://github.com/advisories first.
+#
+#   poetry add PyYAML==<a version with a known CVE>      # REQUIREMENTS.md#SCA-1
+#   poetry add requests==<a version with a known CVE>    # REQUIREMENTS.md#SCA-2
+#   poetry add <your choice>==<a version with a known CVE>  # REQUIREMENTS.md#SCA-3
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
+
+[build-system]
+requires = ["poetry-core>=1.9.0"]
+build-backend = "poetry.core.masonry.api"
