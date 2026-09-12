@@ -1,19 +1,19 @@
 """Admin-only stats.
 
-TODO (DAST-1): this endpoint has no auth check at all -- that omission is
-the vulnerability, and it's intentional: there is nothing to "introduce"
-here. Confirm it's reachable unauthenticated (via a DAST scan, or just
-curl), then implement app.auth.require_admin() and apply it below as the
-fix. See REQUIREMENTS.md#DAST-1.
+DAST-1: this endpoint originally shipped with no auth check at all --
+that omission was the vulnerability. It's now behind app.auth.require_admin()
+as the fix. See REQUIREMENTS.md#DAST-1.
 """
 from flask import Blueprint, jsonify
 
+from app.auth import require_admin
 from app.db import get_connection
 
 bp = Blueprint("admin", __name__)
 
 
 @bp.get("/admin/stats")
+@require_admin
 def stats():
     conn = get_connection()
     try:

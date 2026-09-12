@@ -10,7 +10,8 @@ A hands-on scaffold for validating **Aikido Pro (free plan)** against a realisti
 
 ## What's done for you (boilerplate)
 
-- Flask app factory, routing skeleton, SQLite schema/seed data, health check
+- Flask app factory, routing skeleton, SQLite schema/seed data (12 sample reports), health check
+- `scripts/seed.py` — (re)seed or reset the sample reports on demand
 - `pyproject.toml` (Poetry) with the runtime deps pinned; a `poetry.lock` section below explains the one manual step
 - `Dockerfile`, `docker-compose.ci.yml` for local runs, `render.yaml` for a free Render deploy — all Poetry-based
 - `ci.yml` — install deps via Poetry, run tests (nothing security-related)
@@ -35,6 +36,15 @@ curl localhost:5000/health
 ```bash
 poetry run pytest
 ```
+
+The app seeds itself with 12 sample reports on first run (see `app/db.py`). If you already had the original 3-report DB from before this script existed, or you just want a clean slate, run:
+
+```bash
+poetry run python scripts/seed.py            # adds any seed reports not already present
+poetry run python scripts/seed.py --reset    # wipes data/reports.db and reseeds from scratch
+```
+
+Both are idempotent and safe to rerun.
 
 ### About `poetry.lock`
 

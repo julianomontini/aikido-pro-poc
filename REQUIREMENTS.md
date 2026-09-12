@@ -42,9 +42,9 @@ Static analysis reads code, never runs it. Each of these is a real, well-known v
 
 ### SAST-4 — Insecure deserialization
 **Where:** `app/routes/files.py :: restore_backup()`
-**Do:** Accept an uploaded file (form field `backup`) describing reports to restore, and load it with `yaml.load(data)` (no `Loader=`, or `Loader=yaml.Loader`) — not `yaml.safe_load`. (`pickle.loads` on the uploaded bytes is an equally valid — arguably worse — version of this scenario if you'd rather demonstrate that instead.)
-**Why it's here twice, sort of:** pair this with SCA-1 below (an old, vulnerable `PyYAML` pin) — it's a good example of how a SAST finding (unsafe `yaml.load` call) and an SCA finding (the vulnerable package version) can describe the same real risk from two different angles.
-**Acceptance:** Aikido flags `yaml.load` without a safe loader, or `pickle.loads` on untrusted input, as arbitrary code execution risk.
+**Do:** Accept an uploaded file (form field `backup`) describing reports to restore, and load it with `pickle.loads(data)` on the raw uploaded bytes — no check on where those bytes came from. `pickle` is stdlib, so this needs no extra dependency and no compiler.
+**An alternative, if you have a C compiler available:** `yaml.load(data)` (no `Loader=`, or `Loader=yaml.Loader`, not `yaml.safe_load`) is the classic version of this same bug, and pairs naturally with an old, vulnerable `PyYAML` pin for SCA-1 — a SAST finding (unsafe `yaml.load` call) and an SCA finding (the vulnerable package version) describing the same real risk from two angles. This scaffold defaults to `pickle` instead because PyYAML's pre-5.4 releases need to compile a C extension from source on Windows (`Microsoft Visual C++ 14.0 or greater is required`) unless you install the free Build Tools for Visual Studio first — see the note under SCA-1.
+**Acceptance:** Aikido flags `pickle.loads` (or `yaml.load` without a safe loader, if you went that route) on untrusted/request-derived input as arbitrary code execution risk.
 **Docs:** https://cheatsheetseries.owasp.org/cheatsheets/Deserialization_Cheat_Sheet.html
 
 ### SAST-5 — Weak/broken cryptography
@@ -59,9 +59,11 @@ Static analysis reads code, never runs it. Each of these is a real, well-known v
 
 SCA never reads your code — it reads `pyproject.toml`/`poetry.lock`. Perfectly-written code is still vulnerable if it imports a bad version. Your job here is research, not code: find *real* CVEs (don't invent version numbers) and pin to an affected version with `poetry add package==<version>` (this updates both files — commit both).
 
-### SCA-1 — `PyYAML`
-Find a version of PyYAML with a known CVE (arbitrary code execution via unsafe loading is the classic one) and `poetry add PyYAML==<that version>`. Pairs with SAST-4 above.
-**Look it up:** https://osv.dev/list?ecosystem=PyPI&q=pyyaml · https://github.com/advisories?query=pyyaml
+### SCA-1 — `Jinja2`
+Pin `Jinja2==3.1.2` — vulnerable to [CVE-2024-22195 / GHSA-h5c8-rqwp-cp95](https://github.com/advisories/GHSA-h5c8-rqwp-cp95) (HTML attribute injection via the `xmlattr` filter, fixed in 3.1.3). It's already a Flask dependency (Flask 3.0.x requires `Jinja2>=3.1.2`), so pinning the floor version is enough — no new package, no compiler, nothing else to install. It's also the templating engine behind DAST-4's reflected-XSS scenario, worth noticing as you go: an SCA finding (a vulnerable version) and a DAST finding (how the app actually uses the template) pointing at the same general risk area from different angles.
+
+**If you'd rather use PyYAML for this** (the more classic "vulnerable deserialization library" pick, and what SAST-4 originally paired with): any version before 5.4 needs to compile a C extension from source on Windows, which fails with `Microsoft Visual C++ 14.0 or greater is required` unless you install the free [Build Tools for Visual Studio](https://visualstudio.microsoft.com/visual-cpp-build-tools/) (just the "Desktop development with C++" workload) first. If you've done that: `poetry add PyYAML==5.3.1` ([GHSA-8q59-q68h-6hv4](https://github.com/advisories/GHSA-8q59-q68h-6hv4)), and use the `yaml.load()` variant of SAST-4 instead of `pickle.loads()`.
+**Look it up (if picking a different package/version entirely):** https://osv.dev/list?ecosystem=PyPI · https://github.com/advisories
 
 ### SCA-2 — `requests`
 Find a version of `requests` with a known CVE (credential/header leakage on redirect is a well-known one) and `poetry add requests==<that version>`.

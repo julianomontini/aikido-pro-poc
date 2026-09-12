@@ -11,13 +11,23 @@ python = "^3.12"
 Flask = "^3.0.3"
 gunicorn = "^22.0.0"
 
-# --- SCA exercise (REQUIREMENTS.md#SCA): add at least 3 dependencies below,
+# REQUIREMENTS.md#SCA-1: Jinja2 3.1.2 is vulnerable to CVE-2024-22195
+# (GHSA-h5c8-rqwp-cp95) -- HTML attribute injection via the `xmlattr`
+# filter, fixed in 3.1.3. Pinned exactly (not "^3.1.2") so Poetry can't
+# resolve to a patched version. Chosen over an old PyYAML pin because it's
+# pure Python -- Jinja2 is already a Flask dependency and needs no compiler,
+# unlike PyYAML<5.4 which requires MSVC on Windows to build from source.
+# If you install the Visual C++ Build Tools and want PyYAML instead, see
+# REQUIREMENTS.md#SCA-1 for the swap (and pair it with SAST-4's yaml.load()
+# variant instead of pickle.loads()).
+Jinja2 = "3.1.2"
+
+# --- SCA exercise (REQUIREMENTS.md#SCA): add 2 more dependencies below,
 # pinned to REAL, documented CVEs -- via `poetry add package==<version>`,
 # not by hand-editing a version here and hoping. Let Poetry resolve it and
 # write poetry.lock. Look up affected versions at https://osv.dev or
 # https://github.com/advisories first.
 #
-#   poetry add PyYAML==<a version with a known CVE>      # REQUIREMENTS.md#SCA-1
 #   poetry add requests==<a version with a known CVE>    # REQUIREMENTS.md#SCA-2
 #   poetry add <your choice>==<a version with a known CVE>  # REQUIREMENTS.md#SCA-3
 
