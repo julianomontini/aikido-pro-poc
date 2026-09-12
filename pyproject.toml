@@ -9,7 +9,7 @@ package-mode = false
 [tool.poetry.dependencies]
 python = "^3.12"
 Flask = "^3.0.3"
-gunicorn = "^22.0.0"
+gunicorn = ">=22,<27"
 
 # REQUIREMENTS.md#SCA-1: Jinja2 3.1.2 is vulnerable to CVE-2024-22195
 # (GHSA-h5c8-rqwp-cp95) -- HTML attribute injection via the `xmlattr`
