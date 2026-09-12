@@ -1,6 +1,6 @@
 # --- runtime, boilerplate -- pinned to current safe versions ---
 Flask==3.0.3
-Werkzeug==3.0.4
+Werkzeug==3.1.8
 gunicorn==22.0.0
 
 # --- SCA exercise (REQUIREMENTS.md#SCA): pin at least 3 dependencies below
