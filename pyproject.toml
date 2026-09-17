@@ -20,7 +20,7 @@ gunicorn = "^22.0.0"
 # If you install the Visual C++ Build Tools and want PyYAML instead, see
 # REQUIREMENTS.md#SCA-1 for the swap (and pair it with SAST-4's yaml.load()
 # variant instead of pickle.loads()).
-Jinja2 = "3.1.2"
+Jinja2 = "3.1.6"
 
 # --- SCA exercise (REQUIREMENTS.md#SCA): add 2 more dependencies below,
 # pinned to REAL, documented CVEs -- via `poetry add package==<version>`,
