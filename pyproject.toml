@@ -32,7 +32,7 @@ Jinja2 = "3.1.2"
 #   poetry add <your choice>==<a version with a known CVE>  # REQUIREMENTS.md#SCA-3
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.3.3"
+pytest = ">=8.3.3,<10.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.9.0"]
